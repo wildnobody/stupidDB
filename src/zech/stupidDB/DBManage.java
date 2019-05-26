@@ -10,7 +10,20 @@ import java.util.List;
 
 
 
+/**
+ * @author lawrencereisler
+ *
+ */
 public class DBManage {
+	
+	
+	/**
+	 * initializes the basic globals and migrates the databse tables if they do not exist yet
+	 * @param settings a Class object of the class in which the user globals are set. Should usually be a settings.java file created in the user package.
+	 * @throws IllegalAccessException
+	 * @throws NoSuchFieldException
+	 * @throws InstantiationException
+	 */
 	public static void init(Class<?> settings) throws IllegalAccessException, NoSuchFieldException, InstantiationException{
 		myConnection.settings = settings;
 		Object instance = settings.newInstance();
@@ -37,6 +50,9 @@ public class DBManage {
 		
 	}
 	
+	/**
+	 * @param clazz
+	 */
 	public static void migrate(Class<?> clazz) {
 		try {
 			myConnection.startConnection(Thread.currentThread().getStackTrace()[1]);
@@ -49,6 +65,12 @@ public class DBManage {
 		}
 	}
 	
+	/**
+	 * @param model
+	 * @param fieldName
+	 * @param value
+	 * @return
+	 */
 	public static <T> List<T> select(Class<T> model, String fieldName, String value) {
 		List<T> results = new ArrayList<T>();
 		try {
@@ -72,6 +94,11 @@ public class DBManage {
 		return results;
 	}
 	
+	/**
+	 * @param model
+	 * @param id
+	 * @return
+	 */
 	public static <T> T selectId(Class<T> model, int id) {
 		String pkName = ClassManipulation.getPrimaryKey(model);
 		List<T> results = select(model, pkName, String.valueOf(id));
